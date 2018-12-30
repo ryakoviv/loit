@@ -9,11 +9,7 @@ use yii\filters\auth\HttpBearerAuth;
 use yii\filters\auth\QueryParamAuth;
 use yii\helpers\ArrayHelper;
 
-/**
- * Country Controller API
- *
- * @author Budi Irawan <deerawan@gmail.com>
- */
+
 class ApiController extends ActiveController
 {
     public function beforeAction($action)
@@ -26,12 +22,12 @@ class ApiController extends ActiveController
         return ArrayHelper::merge(
             parent::behaviors(), [
                 'authenticator' => [
-                    'class' => CompositeAuth::className(),
+                    'class' => CompositeAuth::class,
                     'except' => ['create', 'login', 'resetpassword', 'options'],
                     'authMethods' => [
-                        HttpBasicAuth::className(),
-                        HttpBearerAuth::className(),
-                        QueryParamAuth::className(),
+                        HttpBasicAuth::class,
+                        HttpBearerAuth::class,
+                        QueryParamAuth::class,
                     ],
                 ],
             ]

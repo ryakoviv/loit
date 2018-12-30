@@ -29,14 +29,14 @@ class UserController extends ApiController
 
     public function actionLogin()
     {
-        $username = Yii::$app->request->post('username');
+        $email = Yii::$app->request->post('email');
         $password = Yii::$app->request->post('password');
-        if (!$username || !$password) {
-            throw new NotFoundHttpException();
+        if (!$email || !$password) {
+            throw new NotFoundHttpException('Parameters are not found');
         }
-        $model = User::findByUsername($username);
+        $model = User::findByEmail($email);
         if (empty($model)) {
-            throw new NotFoundHttpException('User not found');
+            throw new NotFoundHttpException('User is not found');
         }
 
         if ($model->login($password)) {
@@ -52,10 +52,6 @@ class UserController extends ApiController
        $form->load(Yii::$app->request->post(), '');
        $user = $form->signup();
        if ($user) {
-           $business = new Business();
-           $business->name = 'test';
-           $business->save();
-           $user->link('businesses', $business);
            return $user;
        }
        return $form->getErrors();

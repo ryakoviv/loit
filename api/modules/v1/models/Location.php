@@ -17,6 +17,6 @@ class Location extends ActiveRecord
      */
     public static function tableName()
     {
-        return 'locations';
+        return 'location';
     }
 }

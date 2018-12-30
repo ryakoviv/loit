@@ -16,7 +16,7 @@ class User extends identUser
     public function login($password)
     {
         if ($this->validatePassword($password)) {
-            $this->generateAuthKey();
+//            $this->generateAuthKey();
             return $this->save(false);
         }
         return false;

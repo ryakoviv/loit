@@ -9,6 +9,7 @@ use yii\base\Model;
 class SignupForm extends Model
 {
     public $username;
+    public $email;
     public $password;
 
     /**
@@ -17,17 +18,15 @@ class SignupForm extends Model
     public function rules()
     {
         return [
-            ['username', 'trim'],
-            ['username', 'required'],
-            ['username', 'email'],
-            ['username', 'string', 'max' => 255],
+            [['username', 'email'], 'trim'],
+            [['username', 'email', 'password'], 'required'],
+            ['email', 'email'],
+            [['username', 'email'], 'string', 'max' => 255],
             [
-                'username', 'unique',
-                'targetClass' => '\common\models\User',
-                'message' => 'This email address has already been taken.'
+                ['username', 'email'], 'unique',
+                'targetClass' => User::class,
             ],
 
-            ['password', 'required'],
             ['password', 'string', 'min' => 6],
         ];
     }
@@ -45,6 +44,7 @@ class SignupForm extends Model
 
         $user = new User();
         $user->username = $this->username;
+        $user->email = $this->email;
         $user->setPassword($this->password);
         $user->generateAuthKey();
 
