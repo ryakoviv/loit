@@ -45,21 +45,21 @@ return [
             'enableStrictParsing' => true,
             'showScriptName' => false,
             'rules' => [
-//                [
-//                    'class' => 'yii\rest\UrlRule',
-//                    'controller' => 'v1/feature',
-//                    'extraPatterns' => [
-//                        'OPTIONS <action:\w+>' => 'options'
-//                    ]
-//                ],
-//                [
-//                    'class' => 'yii\rest\UrlRule',
-//                    'controller' => 'v1/user',
-//                    'extraPatterns' => [
-//                        'POST login' => 'login',
-//                        'OPTIONS <action:\w+>' => 'options'
-//                    ]
-//                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'v1/location',
+                    'extraPatterns' => [
+                        'OPTIONS <action:\w+>' => 'options'
+                    ]
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'v1/user',
+                    'extraPatterns' => [
+                        'POST login' => 'login',
+                        'OPTIONS <action:\w+>' => 'options'
+                    ]
+                ],
             ],
         ]
     ],
