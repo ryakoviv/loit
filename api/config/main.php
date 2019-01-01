@@ -60,6 +60,15 @@ return [
                         'OPTIONS <action:\w+>' => 'options'
                     ]
                 ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'v1/thing',
+                    'extraPatterns' => [
+                        'POST create-lost' => 'create-lost',
+                        'POST create-found' => 'create-found',
+                        'OPTIONS <action:\w+>' => 'options'
+                    ]
+                ],
             ],
         ]
     ],

@@ -2,13 +2,10 @@
 
 namespace api\modules\v1\controllers;
 
-use api\modules\v1\models\Business;
-use Yii;
-use api\modules\v1\models\User;
-use api\modules\v1\models\SignupForm;
-use yii\web\NotFoundHttpException;
+use api\common\controllers\ApiController;
+use api\modules\v1\models\Location;
 
 class LocationController extends ApiController
 {
-    public $modelClass = 'api\modules\v1\models\Location';
+    public $modelClass = Location::class;
 }

@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: User
- * Date: 18.06.2018
- * Time: 20:50
- */
 
 namespace api\modules\v1\models;
 
@@ -34,4 +28,5 @@ class User extends identUser
 
         return $fields;
     }
+    //TODO: has many things
 }

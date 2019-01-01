@@ -1,6 +1,6 @@
 <?php
 
-namespace api\modules\v1\controllers;
+namespace api\common\controllers;
 
 use yii\rest\ActiveController;
 use yii\filters\auth\CompositeAuth;
@@ -12,10 +12,7 @@ use yii\helpers\ArrayHelper;
 
 class ApiController extends ActiveController
 {
-    public function beforeAction($action)
-    {
-        return parent::beforeAction($action);
-    }
+    protected $authExcept = [];
 
     public function behaviors()
     {
@@ -23,7 +20,7 @@ class ApiController extends ActiveController
             parent::behaviors(), [
                 'authenticator' => [
                     'class' => CompositeAuth::class,
-                    'except' => ['create', 'login', 'resetpassword', 'options'],
+                    'except' => $this->authExcept,
                     'authMethods' => [
                         HttpBasicAuth::class,
                         HttpBearerAuth::class,

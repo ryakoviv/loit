@@ -6,15 +6,13 @@ use Yii;
 use api\modules\v1\models\User;
 use api\modules\v1\models\SignupForm;
 use yii\web\NotFoundHttpException;
+use api\common\controllers\ApiController;
 
-/**
- * Country Controller API
- *
- * @author Budi Irawan <deerawan@gmail.com>
- */
 class UserController extends ApiController
 {
-    public $modelClass = 'api\modules\v1\models\User';
+    protected $authExcept = ['create', 'login', 'resetpassword', 'options'];
+
+    public $modelClass = User::class;
 
     public function actions()
     {
@@ -34,13 +32,13 @@ class UserController extends ApiController
         if (!$email || !$password) {
             throw new NotFoundHttpException('Parameters are not found');
         }
-        $model = User::findByEmail($email);
-        if (empty($model)) {
+        $user = User::findByEmail($email);
+        if (empty($user)) {
             throw new NotFoundHttpException('User is not found');
         }
 
-        if ($model->login($password)) {
-            return $model;
+        if ($user->login($password)) {
+            return $user;
         } else {
             throw new NotFoundHttpException();
         }
