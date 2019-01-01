@@ -14,8 +14,16 @@ use yii\web\IdentityInterface;
  * @property string $password_hash
  * @property string $password_reset_token
  * @property string $email
+ * @property string $phone
+ * @property string $social
+ * @property boolean $is_email_public
+ * @property boolean $is_phone_public
+ * @property boolean $is_social_public
+ * @property integer $image_id
  * @property string $auth_key
  * @property integer $status
+ * @property integer $role
+ * @property integer $location_id
  * @property integer $created_at
  * @property integer $updated_at
  * @property string $password write-only password

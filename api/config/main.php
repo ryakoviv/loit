@@ -48,6 +48,7 @@ return [
                 [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => 'v1/location',
+                    'pluralize' => false,
                     'extraPatterns' => [
                         'OPTIONS <action:\w+>' => 'options'
                     ]
@@ -55,6 +56,7 @@ return [
                 [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => 'v1/user',
+                    'pluralize' => false,
                     'extraPatterns' => [
                         'POST login' => 'login',
                         'OPTIONS <action:\w+>' => 'options'
@@ -63,9 +65,24 @@ return [
                 [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => 'v1/thing',
+                    'pluralize' => false,
                     'extraPatterns' => [
-                        'POST create-lost' => 'create-lost',
-                        'POST create-found' => 'create-found',
+                        'OPTIONS <action:\w+>' => 'options'
+                    ]
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'v1/thing/lost',
+                    'pluralize' => false,
+                    'extraPatterns' => [
+                        'OPTIONS <action:\w+>' => 'options'
+                    ]
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'v1/thing/found',
+                    'pluralize' => false,
+                    'extraPatterns' => [
                         'OPTIONS <action:\w+>' => 'options'
                     ]
                 ],
@@ -74,6 +91,3 @@ return [
     ],
     'params' => $params,
 ];
-
-
-

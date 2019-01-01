@@ -1,22 +1,27 @@
 <?php
 
-namespace api\modules\v1\controllers;
+namespace api\modules\v1\controllers\thing;
 
 use api\common\controllers\ApiController;
 use api\modules\v1\models\Thing;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\web\ForbiddenHttpException;
+use yii\web\NotFoundHttpException;
 
-class ThingController extends ApiController
+class FoundController extends ApiController
 {
     public $modelClass = Thing::class;
+    public $createScenario = Thing::SCENARIO_FOUND;
 
     public function actions()
     {
         $actions = parent::actions();
 
         $actions['index']['prepareDataProvider'] = [$this, 'prepareDataProvider'];
+        $actions['view']['findModel'] = [$this, 'findModel'];
+        $actions['delete']['findModel'] = [$this, 'findModel'];
+        $actions['update']['findModel'] = [$this, 'findModel'];
         return $actions;
     }
 
@@ -37,7 +42,7 @@ class ThingController extends ApiController
         }
 
         return new ActiveDataProvider([
-            'query' => Thing::find()->where(['open_by_user_id' => Yii::$app->user->id])->andWhere($filter),
+            'query' => Thing::find()->where(['open_by_user_id' => Yii::$app->user->id, 'type' => Thing::TYPE_FOUND])->andWhere($filter),
             'pagination' => [
                 'params' => $requestParams,
             ],
@@ -45,5 +50,13 @@ class ThingController extends ApiController
                 'params' => $requestParams,
             ],
         ]);
+    }
+
+    public function findModel($id, $viewAction) {
+        $model = Thing::findOne(['id' => $id, 'type' => Thing::TYPE_FOUND]);
+        if ($model) {
+            return $model;
+        }
+        throw new NotFoundHttpException("Object not found: $id");
     }
 }
