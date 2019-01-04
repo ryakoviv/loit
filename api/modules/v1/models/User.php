@@ -2,12 +2,12 @@
 
 namespace api\modules\v1\models;
 
-use common\models\User as identUser;
+use common\models\User as commonUser;
 
 /**
  * {@inheritdoc}
  */
-class User extends identUser
+class User extends commonUser
 {
     public function login($password)
     {

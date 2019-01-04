@@ -28,7 +28,7 @@ return [
             'cookieValidationKey' => env('API_COOKIE_VALIDATION_KEY'),
         ],
         'user' => [
-            'identityClass' => 'common\models\User',
+            'identityClass' => 'api\modules\v1\models\User',
             'enableAutoLogin' => false,
         ],
         'log' => [
@@ -64,25 +64,14 @@ return [
                 ],
                 [
                     'class' => 'yii\rest\UrlRule',
-                    'controller' => 'v1/thing',
+                    'controller' => [
+                        'v1/thing',
+                        'v1/thing/lost',
+                        'v1/thing/found'
+                    ],
                     'pluralize' => false,
                     'extraPatterns' => [
-                        'OPTIONS <action:\w+>' => 'options'
-                    ]
-                ],
-                [
-                    'class' => 'yii\rest\UrlRule',
-                    'controller' => 'v1/thing/lost',
-                    'pluralize' => false,
-                    'extraPatterns' => [
-                        'OPTIONS <action:\w+>' => 'options'
-                    ]
-                ],
-                [
-                    'class' => 'yii\rest\UrlRule',
-                    'controller' => 'v1/thing/found',
-                    'pluralize' => false,
-                    'extraPatterns' => [
+                        'POST share/{id}' => 'share',
                         'OPTIONS <action:\w+>' => 'options'
                     ]
                 ],

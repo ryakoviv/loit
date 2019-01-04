@@ -112,8 +112,19 @@ class Thing extends ActiveRecord
         $fields = parent::fields();
 
         $fields['opener'] = 'opener';
+        $fields['supporters'] = 'supporters';
 
         return $fields;
+    }
+
+    public function addSupporter($user)
+    {
+        $alreadyAdded = $this->getSupporters()->where(['id' => $user->id])->exists();
+        if ($alreadyAdded) {
+            return false;
+        }
+        $this->link('supporters', $user);
+        return true;
     }
 
     public function beforeSave($insert)

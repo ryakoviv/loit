@@ -12,7 +12,7 @@ use yii\helpers\ArrayHelper;
 
 class ApiController extends ActiveController
 {
-    protected $authExcept = [];
+    protected $authExcept = ['options'];
 
     public function behaviors()
     {
