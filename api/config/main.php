@@ -72,6 +72,7 @@ return [
                     'pluralize' => false,
                     'extraPatterns' => [
                         'POST share/{id}' => 'share',
+                        'GET public' => 'public',
                         'OPTIONS <action:\w+>' => 'options'
                     ]
                 ],

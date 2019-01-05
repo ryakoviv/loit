@@ -9,6 +9,6 @@ class FoundController extends ThingController
 {
     public $modelClass = Thing::class;
     public $modelType = Thing::TYPE_FOUND;
-    public $createScenario = Thing::SCENARIO_FOUND;
-    public $updateScenario = Thing::SCENARIO_FOUND;
+    public $createScenario = Thing::SCENARIO_SAVE_FOUND;
+    public $updateScenario = Thing::SCENARIO_SAVE_FOUND;
 }

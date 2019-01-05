@@ -4,6 +4,7 @@ namespace api\modules\v1\controllers;
 
 use api\common\controllers\ApiController;
 use api\modules\v1\models\Thing;
+use api\modules\v1\models\ThingSearch;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\web\ForbiddenHttpException;
@@ -43,27 +44,12 @@ class ThingController extends ApiController
 
     public function prepareDataProvider($action, $filter)
     {
-        $requestParams = Yii::$app->getRequest()->getBodyParams();
-        if (empty($requestParams)) {
-            $requestParams = Yii::$app->getRequest()->getQueryParams();
-        }
-        $query = Thing::find()->where(['open_by_user_id' => Yii::$app->user->id]);
+        $searchModel = new ThingSearch(['scenario' => Thing::SCENARIO_SEARCH_PRIVATE]);
         if ($this->modelType) {
-            $query->andWhere(['type' => $this->modelType]);
+            $searchModel->type = $this->modelType;
         }
-        if (!empty($filter)) {
-            $query->andWhere($filter);
-        }
-
-        return new ActiveDataProvider([
-            'query' => $query,
-            'pagination' => [
-                'params' => $requestParams,
-            ],
-            'sort' => [
-                'params' => $requestParams,
-            ],
-        ]);
+        $searchModel->open_by_user_id = Yii::$app->user->id;
+        return $searchModel->search(Yii::$app->request->get());
     }
 
     public function findModel($id, $action = null) {
@@ -86,5 +72,14 @@ class ThingController extends ApiController
         if (!$status) {
             throw new ConflictHttpException("User already added to supporters");
         }
+    }
+
+    public function actionPublic()
+    {
+        $searchModel = new ThingSearch(['scenario' => Thing::SCENARIO_SEARCH_PUBLIC]);
+        if ($this->modelType) {
+            $searchModel->type = $this->modelType;
+        }
+        return $searchModel->search(Yii::$app->request->get());
     }
 }

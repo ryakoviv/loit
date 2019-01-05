@@ -29,8 +29,10 @@ class Thing extends ActiveRecord
     const TYPE_LOST = 1;
     const TYPE_FOUND = 2;
 
-    const SCENARIO_LOST = 'lost';
-    const SCENARIO_FOUND = 'found';
+    const SCENARIO_SAVE_LOST = 'save_lost';
+    const SCENARIO_SAVE_FOUND = 'save_found';
+    const SCENARIO_SEARCH_PRIVATE = 'search_private';
+    const SCENARIO_SEARCH_PUBLIC = 'search_public';
 
     /**
      * {@inheritdoc}
@@ -71,8 +73,8 @@ class Thing extends ActiveRecord
     public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios[self::SCENARIO_LOST] = $this::attributes();
-        $scenarios[self::SCENARIO_FOUND] = $this::attributes();
+        $scenarios[self::SCENARIO_SAVE_LOST] = $this::attributes();
+        $scenarios[self::SCENARIO_SAVE_FOUND] = $this::attributes();
         return $scenarios;
     }
 
@@ -111,8 +113,12 @@ class Thing extends ActiveRecord
     {
         $fields = parent::fields();
 
-        $fields['opener'] = 'opener';
-        $fields['supporters'] = 'supporters';
+        if ($this->scenario === self::SCENARIO_SEARCH_PUBLIC) {
+            $fields['opener'] = 'opener';
+        }
+        $fields['supporters_num'] = function () {
+            return $this->getSupporters()->count();
+        };
 
         return $fields;
     }
@@ -131,11 +137,11 @@ class Thing extends ActiveRecord
     {
         if ($insert) {
             switch ($this->scenario) {
-                case self::SCENARIO_LOST:
+                case self::SCENARIO_SAVE_LOST:
                     $this->type = self::TYPE_LOST;
                     $this->open_by_user_id = Yii::$app->user->id;
                     break;
-                case self::SCENARIO_FOUND:
+                case self::SCENARIO_SAVE_FOUND:
                     $this->type = self::TYPE_FOUND;
                     $this->open_by_user_id = Yii::$app->user->id;
                     break;

@@ -9,8 +9,18 @@ use common\models\User as commonUser;
  */
 class User extends commonUser
 {
+    const SCENARIO_LOGIN = 'login';
+
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios[self::SCENARIO_LOGIN] = $this::attributes();
+        return $scenarios;
+    }
+
     public function login($password)
     {
+        $this->scenario = self::SCENARIO_LOGIN;
         if ($this->validatePassword($password)) {
 //            $this->generateAuthKey();
             return $this->save(false);
@@ -58,9 +68,11 @@ class User extends commonUser
     {
         $fields = parent::fields();
 
-        $fields['auth'] = function (){
-            return base64_encode($this->auth_key);
-        };
+        if ($this->scenario === self::SCENARIO_LOGIN) {
+            $fields['auth'] = function () {
+                return base64_encode($this->auth_key);
+            };
+        }
 
         unset($fields['password_hash'], $fields['password_reset_token'], $fields['status'], $fields['auth_key']);
 
