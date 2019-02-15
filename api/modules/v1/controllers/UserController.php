@@ -7,6 +7,7 @@ use api\modules\v1\models\User;
 use api\modules\v1\models\SignupForm;
 use yii\web\NotFoundHttpException;
 use api\common\controllers\ApiController;
+use yii\web\ServerErrorHttpException;
 
 class UserController extends ApiController
 {
@@ -52,6 +53,10 @@ class UserController extends ApiController
        if ($user) {
            return $user;
        }
-       return $form->getErrors();
+       if (!$form->getErrors()) {
+           throw new ServerErrorHttpException('Failed to create the object for unknown reason.');
+       }
+
+       return $form;
     }
 }

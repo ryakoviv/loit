@@ -6,7 +6,6 @@ use api\common\controllers\ApiController;
 use api\modules\v1\models\Thing;
 use api\modules\v1\models\ThingSearch;
 use Yii;
-use yii\data\ActiveDataProvider;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\ConflictHttpException;
@@ -17,6 +16,7 @@ class ThingController extends ApiController
     public $modelType = null;
     public $createScenario = Thing::SCENARIO_DEFAULT;
     public $updateScenario = Thing::SCENARIO_DEFAULT;
+    protected $authExcept = ['public', 'options'];
 
     public function actions()
     {

@@ -14,10 +14,6 @@ class ThingSearch extends Thing
         ];
     }
 
-    public function scenarios()
-    {
-        return parent::scenarios();
-    }
 
     public function search($params)
     {
@@ -44,15 +40,5 @@ class ThingSearch extends Thing
             ->andFilterWhere(['open_by_user_id' => $this->open_by_user_id]);
 
         return $dataProvider;
-    }
-
-    public function fields()
-    {
-        $fields = parent::fields();
-
-        $fields['opener'] = 'opener';
-        $fields['supporters'] = 'supporters';
-
-        return $fields;
     }
 }

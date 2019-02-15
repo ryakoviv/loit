@@ -75,6 +75,8 @@ class Thing extends ActiveRecord
         $scenarios = parent::scenarios();
         $scenarios[self::SCENARIO_SAVE_LOST] = $this::attributes();
         $scenarios[self::SCENARIO_SAVE_FOUND] = $this::attributes();
+        $scenarios[self::SCENARIO_SEARCH_PRIVATE] = $this::attributes();
+        $scenarios[self::SCENARIO_SEARCH_PUBLIC] = $this::attributes();
         return $scenarios;
     }
 
