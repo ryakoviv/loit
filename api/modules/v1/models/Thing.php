@@ -13,6 +13,10 @@ use Yii;
  * @property string $name
  * @property string $description
  * @property integer $happened_at
+ * @property string $location_text
+ * @property float $location_center_lat
+ * @property float $location_center_lng
+ * @property float $location_radius
  * @property boolean $is_closed
  * @property integer $closed_by_user_id
  * @property integer $open_by_user_id
@@ -59,9 +63,16 @@ class Thing extends ActiveRecord
     {
         return [
             [['name', 'description'], 'trim'],
-            [['name', 'description'], 'required'],
+            [
+                ['name', 'description', 'happened_at', 'location_text', 'location_center_lat', 'location_center_lng', 'location_radius'],
+                'required'
+            ],
             ['name', 'string', 'max' => 100],
-            ['description', 'string', 'max' => 255],
+            [['description', 'location_text'], 'string', 'max' => 255],
+            [
+                ['location_center_lat', 'location_center_lng', 'location_radius'],
+                'number'
+            ],
             ['is_closed', 'default', 'value' => 0],
             ['is_closed', 'in', 'range' => [0, 1]],
             ['type', 'in', 'range' => [self::TYPE_LOST, self::TYPE_FOUND]],
@@ -93,11 +104,6 @@ class Thing extends ActiveRecord
     public function getRelatedThing()
     {
         return $this->hasOne(self::class, ['id' => 'closed_by_item_id']);
-    }
-
-    public function getLocation()
-    {
-        return $this->hasOne(Location::class, ['id' => 'location_id']);
     }
 
     public function getImage()
