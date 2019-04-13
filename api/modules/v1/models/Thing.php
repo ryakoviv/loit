@@ -41,7 +41,7 @@ class Thing extends ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return 'thing';
     }
@@ -49,7 +49,7 @@ class Thing extends ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
+    public function behaviors(): array
     {
         return [
             TimestampBehavior::class,
@@ -59,7 +59,7 @@ class Thing extends ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['name', 'description'], 'trim'],
@@ -81,7 +81,7 @@ class Thing extends ActiveRecord
         ];
     }
 
-    public function scenarios()
+    public function scenarios(): array
     {
         $scenarios = parent::scenarios();
         $scenarios[self::SCENARIO_SAVE_LOST] = $this::attributes();
@@ -117,7 +117,7 @@ class Thing extends ActiveRecord
             ->viaTable('user_shared_thing', ['thing_id' => 'id']);
     }
 
-    public function fields()
+    public function fields(): array
     {
         $fields = parent::fields();
 
@@ -127,11 +127,13 @@ class Thing extends ActiveRecord
         $fields['supporters_num'] = function () {
             return $this->getSupporters()->count();
         };
+        unset($fields['image_id']);
+        $fields['image'] = 'image';
 
         return $fields;
     }
 
-    public function addSupporter($user)
+    public function addSupporter($user): bool
     {
         $alreadyAdded = $this->getSupporters()->where(['id' => $user->id])->exists();
         if ($alreadyAdded) {
@@ -141,9 +143,25 @@ class Thing extends ActiveRecord
         return true;
     }
 
-    public function beforeSave($insert)
+    public function beforeValidate(): bool
     {
+        $image = new Image();
+        $image->loadImageFile();
+        $status = $image->validateImageFile();
+        if (!$status) {
+            $this->addErrors($image->getErrors());
+            return false;
+        }
+        return parent::beforeValidate();
+    }
+
+    public function beforeSave($insert): bool
+    {
+        $image = new Image();
         if ($insert) {
+            $image->loadImageFile();
+            $image->saveImageFile();
+            $this->image_id = $image->id;
             switch ($this->scenario) {
                 case self::SCENARIO_SAVE_LOST:
                     $this->type = self::TYPE_LOST;
@@ -153,6 +171,14 @@ class Thing extends ActiveRecord
                     $this->type = self::TYPE_FOUND;
                     $this->open_by_user_id = Yii::$app->user->id;
                     break;
+            }
+        } else {
+            $image->loadImageFile();
+            $image->saveImageFile();
+            if ($image->id !== $this->image_id) {
+                $image = Image::findOne($this->image_id);
+                $image->delete();
+                $this->image_id = $image->id;
             }
         }
         return parent::beforeSave($insert);
