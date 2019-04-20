@@ -30,6 +30,7 @@ use Yii;
 class Thing extends ActiveRecord
 {
 
+    public $location_distance_to_circle;
     const TYPE_LOST = 1;
     const TYPE_FOUND = 2;
 
