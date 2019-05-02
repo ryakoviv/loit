@@ -3,6 +3,7 @@
 namespace api\modules\v1\models;
 
 use yii\db\ActiveRecord;
+use yii\helpers\Url;
 use yii\web\UploadedFile;
 use yii\behaviors\TimestampBehavior;
 
@@ -94,6 +95,20 @@ class Image extends ActiveRecord
             }
 
         }
+    }
+
+    public function getSrc()
+    {
+        return Url::to($this->url, true);
+    }
+
+    public function fields(): array
+    {
+        $fields = parent::fields();
+
+        $fields['src'] = 'src';
+
+        return $fields;
     }
 
     protected static function createPath(): string
