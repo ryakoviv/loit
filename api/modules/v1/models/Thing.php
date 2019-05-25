@@ -92,6 +92,11 @@ class Thing extends ActiveRecord
         return $scenarios;
     }
 
+    public function getUserIsOwner()
+    {
+        return $this->open_by_user_id === Yii::$app->user->id;
+    }
+
     public function getOpener()
     {
         return $this->hasOne(User::class, ['id' => 'open_by_user_id']);
@@ -128,6 +133,7 @@ class Thing extends ActiveRecord
         $fields['supporters_num'] = function () {
             return $this->getSupporters()->count();
         };
+        $fields['userIsOwner'] = 'userIsOwner';
         unset($fields['image_id']);
         $fields['image'] = 'image';
 

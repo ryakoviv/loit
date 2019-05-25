@@ -4,6 +4,7 @@ namespace api\modules\v1\models;
 
 use yii\data\ActiveDataProvider;
 use yii\base\Event;
+use Yii;
 
 class ThingSearch extends Thing
 {
@@ -22,9 +23,19 @@ class ThingSearch extends Thing
             $event->sender->scenario = $scenario;
         });
 
+        $query = Thing::find();
+        switch ($this->scenario) {
+            case self::SCENARIO_SEARCH_PRIVATE:
+                $query->andFilterWhere(['open_by_user_id' => Yii::$app->user->id]);
+                break;
+            case self::SCENARIO_SEARCH_PUBLIC:
+                $query->andFilterWhere(['<>', 'open_by_user_id', Yii::$app->user->id]);
+                break;
+        }
+
         if (!($this->load($params, '') && $this->validate())) {
             return new ActiveDataProvider([
-                'query' => Thing::find(),
+                'query' => $query,
             ]);
         }
         if ($this->location_center_lat && $this->location_center_lng && $this->location_radius) {
@@ -32,7 +43,7 @@ class ThingSearch extends Thing
             $lng = $this->location_center_lng;
             $radius = $this->location_radius;
 
-            $query = Thing::find()->select([
+            $query->select([
                 Thing::tableName(). '.*',
 //                "6371000 * 2 * ASIN(SQRT(
 //                POWER(SIN(($lat - abs([[location_center_lat]])) * pi()/180 / 2),
@@ -47,22 +58,17 @@ class ThingSearch extends Thing
             ]);
 
             $query->andFilterHaving(['<=', 'location_distance_to_circle', 0]);
-        } else {
-            $query = Thing::find();
         }
-
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-        ]);
 
         $query->andFilterWhere(['id' => $this->id])
             ->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'description', $this->description])
             ->andFilterWhere(['is_closed' => $this->is_closed]);
 
-        $query->andFilterWhere(['type' => $this->type])
-            ->andFilterWhere(['open_by_user_id' => $this->open_by_user_id]);
+        $query->andFilterWhere(['type' => $this->type]);
 
-        return $dataProvider;
+        return new ActiveDataProvider([
+            'query' => $query,
+        ]);
     }
 }
