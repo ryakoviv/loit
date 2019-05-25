@@ -16,7 +16,7 @@ class ThingController extends ApiController
     public $modelType = null;
     public $createScenario = Thing::SCENARIO_DEFAULT;
     public $updateScenario = Thing::SCENARIO_DEFAULT;
-    protected $authExcept = ['public', 'options'];
+    protected $authOptional = ['public'];
 
     public function actions()
     {
@@ -48,7 +48,6 @@ class ThingController extends ApiController
         if ($this->modelType) {
             $searchModel->type = $this->modelType;
         }
-        $searchModel->open_by_user_id = Yii::$app->user->id;
         return $searchModel->search(Yii::$app->request->get());
     }
 

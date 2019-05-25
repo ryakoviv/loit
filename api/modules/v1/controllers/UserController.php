@@ -26,6 +26,11 @@ class UserController extends ApiController
         return $actions;
     }
 
+    public function actionMe()
+    {
+        return Yii::$app->user->identity;
+    }
+
     public function actionLogin()
     {
         $email = Yii::$app->request->post('email');
@@ -39,7 +44,7 @@ class UserController extends ApiController
         }
 
         if ($user->login($password)) {
-            return $user;
+            return $user->auth;
         } else {
             throw new NotFoundHttpException();
         }
@@ -51,7 +56,7 @@ class UserController extends ApiController
        $form->load(Yii::$app->request->post(), '');
        $user = $form->signup();
        if ($user) {
-           return $user;
+           return $user->auth;
        }
        if (!$form->getErrors()) {
            throw new ServerErrorHttpException('Failed to create the object for unknown reason.');

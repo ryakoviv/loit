@@ -23,9 +23,13 @@ class User extends commonUser
         $this->scenario = self::SCENARIO_LOGIN;
         if ($this->validatePassword($password)) {
 //            $this->generateAuthKey();
-            return $this->save(false);
+            return true;
         }
         return false;
+    }
+
+    public function getAuth() {
+        return base64_encode($this->auth_key);
     }
 
     public function getLocation()
@@ -68,11 +72,9 @@ class User extends commonUser
     {
         $fields = parent::fields();
 
-        if ($this->scenario === self::SCENARIO_LOGIN) {
-            $fields['auth'] = function () {
-                return base64_encode($this->auth_key);
-            };
-        }
+//        if ($this->scenario === self::SCENARIO_LOGIN) {
+//            $fields['auth'] = 'auth';
+//        }
 
         unset($fields['password_hash'], $fields['password_reset_token'], $fields['status'], $fields['auth_key']);
 

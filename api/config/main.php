@@ -59,6 +59,7 @@ return [
                     'controller' => 'v1/user',
                     'pluralize' => false,
                     'extraPatterns' => [
+                        'GET me' => 'me',
                         'POST login' => 'login',
                         'OPTIONS <action:\w+>' => 'options'
                     ]

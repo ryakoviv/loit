@@ -13,6 +13,7 @@ use yii\helpers\ArrayHelper;
 class ApiController extends ActiveController
 {
     protected $authExcept = ['options'];
+    protected $authOptional = [];
 
     public function behaviors()
     {
@@ -21,6 +22,7 @@ class ApiController extends ActiveController
                 'authenticator' => [
                     'class' => CompositeAuth::class,
                     'except' => $this->authExcept,
+                    'optional' => $this->authOptional,
                     'authMethods' => [
                         HttpBasicAuth::class,
                         HttpBearerAuth::class,
