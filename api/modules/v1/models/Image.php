@@ -88,7 +88,13 @@ class Image extends ActiveRecord
             do {
                 $pathFile = $pathDir . uniqid() . '.' . $this->imageFile->extension;
             } while (file_exists($pathFile));
-            $status = $this->imageFile->saveAs($pathFile);
+            // Do not use $this->imageFile->saveAs() as it works only with POST data, but we use also PUT data to
+            // upload the file https://www.yiiframework.com/doc/api/2.0/yii-web-multipartformdataparser
+
+            $status = copy($this->imageFile->tempName, $pathFile);
+            if (is_uploaded_file($this->imageFile->tempName)) {
+                unlink($this->imageFile->tempName);
+            }
             if ($status) {
                 $this->url = $pathFile;
                 $this->save(false);

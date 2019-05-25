@@ -177,8 +177,12 @@ class Thing extends ActiveRecord
             $image->loadImageFile();
             $image->saveImageFile();
             if ($image->id !== $this->image_id) {
-                $image = Image::findOne($this->image_id);
-                $image->delete();
+                if ($this->image_id) {
+                    $oldImage = Image::findOne($this->image_id);
+                    if ($oldImage) {
+                        $oldImage->delete();
+                    }
+                }
                 $this->image_id = $image->id;
             }
         }
